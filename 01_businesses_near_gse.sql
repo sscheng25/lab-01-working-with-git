@@ -11,4 +11,7 @@
   The latter should be used if getting distances for ORDER BY.
 */
 
-select ...
+select * from business_licenses
+where opa_owner not like 'TRS UNIV OF %'
+order by the_geom <-> st_setsrid(st_makepoint(-75.1972, 39.9533), 4326)
+limit 5
