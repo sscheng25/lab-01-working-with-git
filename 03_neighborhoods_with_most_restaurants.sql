@@ -9,7 +9,15 @@
 */
 
 with business_annotated_with_neighborhood as (
-    select ...
+    select lic.objectid ,lic.address,lic.licensenum, lic.licensetyp, nbh.name as neighborhood_name
+	from business_licenses as lic
+	left join neighborhoods_philadelphia as nbh
+	on st_contains(nbh.the_geom, lic.the_geom) = true
+	where lic.the_geom is not null
 )
-
-select ...
+select bus.neighborhood_name, count(*) as number_of_restaurant
+from business_annotated_with_neighborhood as bus
+where bus.licensetyp like 'Food %'
+group by bus.neighborhood_name
+order by number_of_restaurant desc
+limit 5
